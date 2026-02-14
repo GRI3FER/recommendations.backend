@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/health",
+      "dest": "/api/health.js"
+    },
+    {
+      "src": "/api/endorsements",
+      "dest": "/api/endorsements.js"
+    },
+    {
+      "src": "/api/submit",
+      "dest": "/api/submit.js"
+    },
+    {
+      "src": "/api/admin/endorsements",
+      "dest": "/api/admin/endorsements.js"
+    },
+    {
+      "src": "/api/admin/approve",
+      "dest": "/api/admin/approve.js"
+    },
+    {
+      "src": "/api/admin/delete",
+      "dest": "/api/admin/delete.js"
+    }
+  ],
+  "env": {
+    "MONGODB_URI": "@mongodb_uri",
+    "EMAIL_USER": "@email_user",
+    "EMAIL_PASSWORD": "@email_password",
+    "ADMIN_EMAIL": "@admin_email",
+    "ADMIN_KEY": "@admin_key",
+    "ADMIN_URL": "@admin_url"
+  }
+}
