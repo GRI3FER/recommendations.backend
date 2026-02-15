@@ -1,16 +1,9 @@
-// Only load dotenv in local development
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
-
+// api/endorsements.js
 const { connectDB, Endorsement } = require('../lib/db');
 
 module.exports = async (req, res) => {
-    // CORS (restrict to your frontend in production)
-    const allowedOrigin = process.env.FRONTEND_URL || '*';
-
     res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -26,9 +19,9 @@ module.exports = async (req, res) => {
         await connectDB();
 
         const endorsements = await Endorsement.find({ status: 'approved' })
-            .select('-email -__v') // exclude sensitive + internal fields
+            .select('-email -__v') 
             .sort({ approvedDate: -1 })
-            .lean(); // performance boost
+            .lean(); 
 
         return res.status(200).json(endorsements);
 
