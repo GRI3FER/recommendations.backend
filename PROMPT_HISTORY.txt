@@ -1,0 +1,56 @@
+Chat log with Claude: https://claude.ai/share/09c0e024-0e2d-40ce-8920-a7b75f8cee9a
+
+Chat log with Gemini: https://gemini.google.com/share/2c2e71b74ea8
+
+--------------------------------------------------------------------------------------------------------
+
+Critical Prompts: 
+
+Claude: (I used for overarching Archeticture and debugging)
+
+I want to create an additional HTML page on my website that does the following:
+
+🎯 Concept: “Professional Endorsements”
+On your portfolio:
+💬 Testimonials Professors. Teammates. Project collaborators.
+People can submit:
+* Name
+* Role (e.g., “Professor of Economics, CMU”)
+* Relationship to you
+* Short endorsement
+* Optional LinkedIn link
+
+It needs to utilize a backend
+
+------
+
+health worked but recommendations.html still did this:
+
+✗ Error: Failed to fetch
+
+do I need to change api link from : 
+
+https://recommendations-backend-seven.vercel.app
+
+------
+
+✗ Error: Failed to submit endorsement again and I added the right server variable for MONGODB_URI
+
+--------------------------------------------------------------------------------------------------------
+
+Gemini: (I used for minor debugging and mostly UI fixes)
+
+-------
+
+Make the provide a recommendation a pop up and make it so clicking the name opens the LinkedIN
+
+also validate that the email is a valid email and that url is both a valid URL and a linkedin url
+
+------
+
+Can u make it so that the pop up is entirely vertical so that the role bar is below the name bar also remove the gray inside each text book it's unecessary
+
+Finally remove the checking if it's a link as it already
+
+------
+
