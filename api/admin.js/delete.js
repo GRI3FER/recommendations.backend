@@ -1,13 +1,18 @@
+// Only load dotenv in local development
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const { connectDB, Endorsement } = require('../../lib/db');
 
-// Admin authentication middleware
+// Admin authentication
 function checkAdminAuth(req) {
     const adminKey = req.headers['x-admin-key'];
-    return adminKey === process.env.ADMIN_KEY;
+    return adminKey && adminKey === process.env.ADMIN_KEY;
 }
 
 module.exports = async (req, res) => {
-    // Set CORS headers
+    // CORS headers
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'DELETE,OPTIONS');
@@ -22,7 +27,6 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    // Check authentication
     if (!checkAdminAuth(req)) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
@@ -42,10 +46,13 @@ module.exports = async (req, res) => {
             return res.status(404).json({ error: 'Endorsement not found' });
         }
 
-        res.status(200).json({ message: 'Endorsement deleted' });
+        return res.status(200).json({ 
+            message: 'Endorsement deleted',
+            id 
+        });
 
     } catch (error) {
         console.error('Error deleting endorsement:', error);
-        res.status(500).json({ error: 'Failed to delete endorsement' });
+        return res.status(500).json({ error: 'Failed to delete endorsement' });
     }
 };

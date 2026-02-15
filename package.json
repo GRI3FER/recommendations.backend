@@ -4,19 +4,45 @@
   "description": "Backend API for professional endorsements system - Vercel Serverless",
   "main": "api/endorsements.js",
   "scripts": {
-    "dev": "vercel dev"
+    "dev": "vercel dev",
+    "start": "node server.js"
   },
-  "keywords": ["endorsements", "portfolio", "api", "vercel", "serverless"],
+  "keywords": [
+    "endorsements",
+    "portfolio",
+    "api",
+    "vercel",
+    "serverless"
+  ],
   "author": "Ansh",
   "license": "MIT",
   "dependencies": {
-    "mongoose": "^8.0.0",
-    "nodemailer": "^6.9.7"
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongodb": "^7.1.0",
+    "mongoose": "^8.23.0",
+    "nodemailer": "^8.0.1",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "vercel": "^33.0.0"
+    "@types/node": "^25.2.3",
+    "vercel": "^50.17.1"
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GRI3FER/recommendations.backend.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GRI3FER/recommendations.backend/issues"
+  },
+  "homepage": "https://github.com/GRI3FER/recommendations.backend#readme"
 }
