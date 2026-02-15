@@ -1,65 +1,43 @@
-// Only load dotenv in local development
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
-
-const mongoose = require('mongoose');
 const { connectDB, Endorsement } = require('../../lib/db');
 
-// Admin authentication
-function checkAdminAuth(req) {
-    const adminKey = req.headers['x-admin-key'];
-    return adminKey && adminKey === process.env.ADMIN_KEY;
-}
-
 module.exports = async (req, res) => {
-    // CORS (restrict to your frontend domain)
-    const allowedOrigin = process.env.ADMIN_URL || '*';
-
+    // 1. Setup CORS
     res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
-    res.setHeader('Access-Control-Allow-Methods', 'DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Admin-Key');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key');
 
+    // 2. Handle Options
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
 
-    if (req.method !== 'DELETE') {
+    // 3. CRITICAL FIX: Allow GET method (not POST)
+    if (req.method !== 'GET') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    if (!checkAdminAuth(req)) {
+    // 4. Check Admin Key
+    const adminKey = req.headers['x-admin-key'];
+    if (adminKey !== process.env.ADMIN_KEY) {
+        // If visiting in browser, you will see this error (Unauthorized). 
+        // This is normal! You must use the Admin Panel HTML to view data.
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
     try {
-        const { id } = req.query;
-
-        if (!id) {
-            return res.status(400).json({ error: 'Endorsement ID required' });
-        }
-
-        // Prevent invalid ObjectId crash
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: 'Invalid endorsement ID format' });
-        }
-
         await connectDB();
-
-        const endorsement = await Endorsement.findByIdAndDelete(id);
-
-        if (!endorsement) {
-            return res.status(404).json({ error: 'Endorsement not found' });
+        
+        // 5. Get Data (Allow filtering by ?status=pending)
+        const filter = {};
+        if (req.query.status) {
+            filter.status = req.query.status;
         }
 
-        return res.status(200).json({
-            message: 'Endorsement deleted',
-            id
-        });
-
-    } catch (error) {
-        console.error('Error deleting endorsement:', error);
-        return res.status(500).json({ error: 'Failed to delete endorsement' });
+        const items = await Endorsement.find(filter).sort({ submittedAt: -1 });
+        res.status(200).json(items);
+    } catch (err) {
+        console.error("Admin Fetch Error:", err);
+        res.status(500).json({ error: 'Server Error' });
     }
 };
