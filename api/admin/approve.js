@@ -49,6 +49,11 @@ module.exports = async (req, res) => {
 
         endorsement.status = 'approved';
         endorsement.approvedDate = new Date();
+
+        // Save photo URL if the admin provided one
+        const { photo_url } = req.body || {};
+        if (photo_url) endorsement.photo_url = photo_url;
+
         await endorsement.save();
 
         // Fire-and-forget email to avoid serverless timeout
