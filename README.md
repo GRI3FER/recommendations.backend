@@ -6,3 +6,5 @@ even if the website URL is exposed, it is still secure and unexposed in the fron
 https://anshgandhi.vercel.app/endorsements.html - Frontend Link
 
 Email notifications are now enabled on submission and sent to `ADMIN_EMAIL` plus the owner inbox `anshgandhi06@gmail.com`.
+
+API responses now include a `warning` field when an endorsement is saved/approved but the email notification fails, so email issues are visible to the frontend instead of failing silently.

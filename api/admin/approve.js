@@ -51,13 +51,18 @@ module.exports = async (req, res) => {
         endorsement.approvedDate = new Date();
         await endorsement.save();
 
-        // Fire-and-forget email to avoid serverless timeout
-        sendApprovalNotification(endorsement)
-            .catch(err => console.error('Approval email error:', err));
+        let warning;
+        try {
+            await sendApprovalNotification(endorsement);
+        } catch (emailError) {
+            console.error('Approval email error:', emailError);
+            warning = 'Endorsement approved, but approval notification email failed to send';
+        }
 
         return res.status(200).json({
             message: 'Endorsement approved',
-            endorsement
+            endorsement,
+            ...(warning ? { warning } : {})
         });
 
     } catch (error) {

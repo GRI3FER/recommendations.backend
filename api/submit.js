@@ -52,14 +52,18 @@ module.exports = async (req, res) => {
 
         await newEndorsement.save();
 
-        // Send email notification (don't await to avoid timeout)
-        sendAdminNotification(newEndorsement, [notifyEmail, ownerEmail]).catch(err => 
-            console.error('Email notification error:', err)
-        );
+        let warning;
+        try {
+            await sendAdminNotification(newEndorsement, [notifyEmail, ownerEmail]);
+        } catch (emailError) {
+            console.error('Email notification error:', emailError);
+            warning = 'Endorsement saved, but admin notification email failed to send';
+        }
 
         res.status(201).json({
             message: 'Endorsement submitted successfully',
-            id: newEndorsement._id
+            id: newEndorsement._id,
+            ...(warning ? { warning } : {})
         });
 
     } catch (error) {
