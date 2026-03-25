@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
     }
 
     try {
-        const { name, role, relationship, endorsement, linkedin, email } = req.body;
+        const { name, role, relationship, endorsement, linkedin, email, notifyEmail, ownerEmail } = req.body;
 
         // Validation
         if (!name || !role || !relationship || !endorsement || !linkedin || !email) {
@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
         await newEndorsement.save();
 
         // Send email notification (don't await to avoid timeout)
-        sendAdminNotification(newEndorsement).catch(err => 
+        sendAdminNotification(newEndorsement, [notifyEmail, ownerEmail]).catch(err => 
             console.error('Email notification error:', err)
         );
 

@@ -5,4 +5,4 @@ even if the website URL is exposed, it is still secure and unexposed in the fron
 
 https://anshgandhi.vercel.app/endorsements.html - Frontend Link
 
-(I was planning on adding an email integration, so I got an email every time someone submitted a recommendation but wasn't able to finish)
+Email notifications are now enabled on submission and sent to `ADMIN_EMAIL` plus the owner inbox `anshgandhi06@gmail.com`.
